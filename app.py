@@ -5,11 +5,6 @@ from datetime import datetime
 from weasyprint import HTML
 import io
 
-"""
-#! This creates the invoice pdf off the invoice.html template we used
-#html = HTML('invoice.html')
-#html.write_pdf('invoice.pdf')
-"""
 
 app = Flask(__name__)
 
@@ -27,16 +22,16 @@ def hello_world():
         },
         'invoice_number': 123,
         'items': [{
-            'charge': 300.0,
-            'title': 'website design'
+                'charge': 300.0,
+                'title': 'website design'
             },
             {
-            'charge': 75.0,
-            'title': 'Hosting (3 months)'
+                'charge': 75.0,
+                'title': 'Hosting (3 months)'
             },
             {
-            'charge': 10.0,
-            'title': 'Domain name (1 year)'
+                'charge': 10.0,
+                'title': 'Domain name (1 year)'
             }
         ],
         'to_addr': {
@@ -49,19 +44,20 @@ def hello_world():
     duedate = posted_data.get('duedate', default_data['duedate'])
     from_addr = posted_data.get('from_addr', default_data['from_addr'])
     to_addr = posted_data.get('to_addr', default_data['to_addr'])
-    invoice_number = posted_data.get('invoice_number', default_data['invoice_number'])
+    invoice_number = posted_data.get('invoice_number',
+                                      default_data['invoice_number'])
     items = posted_data.get('items', default_data['items'])
     
     total = sum([i['charge'] for i in items])
     
     rendered = render_template('invoice.html', 
-                        date = today,
-                        from_addr = from_addr,
-                        to_addr = to_addr,
-                        items = items,
-                        total = total,
-                        invoice_number = invoice_number,
-                        duedate = duedate )  
+                            date = today,
+                            from_addr = from_addr,
+                            to_addr = to_addr,
+                            items = items,
+                            total = total,
+                            invoice_number = invoice_number,
+                            duedate = duedate)  
 
     html = HTML(string=rendered)
     print(rendered)
